@@ -1,0 +1,66 @@
+version: '3'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: php-fpm.Dockerfile
+    volumes:
+      - .:/var/www/html
+    expose:
+      - "9000"
+    environment:
+      - DB_CONNECTION=mysql
+      - DB_HOST=mysqlserver
+      - DB_PORT=3306
+      - DB_DATABASE=test
+      - DB_USERNAME=root
+      - DB_PASSWORD=MySql2024!
+    command: /bin/sh -c "composer install && chmod -R 777 /var/www/html/storage && chmod -R 775 /var/www/html/storage/logs && php-fpm"
+    networks:
+      - app-network
+
+  web:
+    build:
+      context: .
+      dockerfile: nginx.Dockerfile
+    ports:
+      - "8080:80"
+    volumes:
+      - .:/var/www/html
+    depends_on:
+      - app
+    networks:
+      - app-network
+
+  mysqlserver:
+    container_name: mysqlserver
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: "MySql2024!"
+      MYSQL_DATABASE: "test"
+    ports:
+      - "3309:3306"
+    volumes:
+      - ./mysql_data:/var/lib/mysql
+    networks:
+      - app-network
+
+  mysqlservertest:
+    container_name: mysqlservertest
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: "MySql2024!"
+      MYSQL_DATABASE: "database_test"
+    ports:
+      - "3310:3306"
+    volumes:
+      - ./mysql_data_test:/var/lib/mysql
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
