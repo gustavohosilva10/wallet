@@ -3,10 +3,10 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use App\Domain\Users\Contracts\UserInterface;
-use App\Infraestructure\Repositories\UserRepository;
-use App\Domain\Transfers\Contracts\TransferInterface;
-use App\Infraestructure\Repositories\TransferRepository;
+use App\Domain\Person\Contracts\PersonInterface;
+use App\Infraestructure\Repositories\PersonRepository;
+use App\Domain\Contact\Contracts\ContactInterface;
+use App\Infraestructure\Repositories\ContactRepository;
 
 class RepositoryServiceProvider extends ServiceProvider
 {
@@ -17,8 +17,8 @@ class RepositoryServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind(UserInterface::class, UserRepository::class);
-        $this->app->bind(TransferInterface::class, TransferRepository::class);
+        $this->app->bind(PersonInterface::class, PersonRepository::class);
+        $this->app->bind(ContactInterface::class, ContactRepository::class);
     }
 
     /**

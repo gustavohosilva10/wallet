@@ -1,63 +1,498 @@
 {
     "openapi": "3.0.0",
     "info": {
-        "title": "API de Transferências",
-        "description": "Esta é a documentação da API de Transferências.",
+        "title": "API de Contatos",
+        "description": "Esta é a documentação da API contatos.",
         "version": "1.0.0"
     },
     "paths": {
-        "/transfer": {
+        "/validate-brackets": {
             "post": {
                 "tags": [
-                    "Transferências"
+                    "Brackets"
                 ],
-                "summary": "Realiza uma transferência",
-                "description": "Este endpoint realiza uma transferência entre usuários.",
-                "operationId": "transfer",
+                "summary": "Validate bracket sequence",
+                "operationId": "78c29a1aee8fd9faaef7a51f113ab24f",
                 "requestBody": {
                     "required": true,
                     "content": {
                         "application/json": {
                             "schema": {
-                                "$ref": "#/components/schemas/TransferRequest"
+                                "$ref": "#/components/schemas/BracketRequest"
                             }
                         }
                     }
                 },
                 "responses": {
-                    "201": {
-                        "description": "Transferência realizada com sucesso"
+                    "200": {
+                        "description": "Valid sequence",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Valid sequence"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
                     },
                     "400": {
-                        "description": "Erro na transferência"
+                        "description": "Invalid sequence",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Invalid sequence"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The brackets field is required."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
                     }
                 }
             }
         },
-        "/register": {
+        "/api/contacts": {
+            "get": {
+                "tags": [
+                    "Contatos"
+                ],
+                "summary": "Lista todos os contatos",
+                "operationId": "58c0129b81e10aa54478936abda0eb0b",
+                "responses": {
+                    "200": {
+                        "description": "Lista de contatos",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Contact"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Erro ao processar a requisição",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Erro ao listar contatos"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
             "post": {
                 "tags": [
-                    "Usuários"
+                    "Contatos"
                 ],
-                "summary": "Registra um novo usuário",
-                "description": "Este endpoint registra um novo usuário.",
-                "operationId": "registerUser",
+                "summary": "Cria um novo contato",
+                "operationId": "e70338b5beb975934484a7223cd45163",
+                "requestBody": {
+                    "required": true
+                },
+                "responses": {
+                    "201": {
+                        "description": "Contato criado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/Contact"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Erro ao processar a requisição",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Erro ao criar contato"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/contacts/{contact}": {
+            "get": {
+                "tags": [
+                    "Contatos"
+                ],
+                "summary": "Obtém detalhes de um contato",
+                "operationId": "48f3b6b6be30027138883726b758f5c3",
+                "parameters": [
+                    {
+                        "name": "contact",
+                        "in": "path",
+                        "description": "ID do contato",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Detalhes do contato",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Erro ao processar a requisição",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Erro ao obter contato"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Contatos"
+                ],
+                "summary": "Atualiza um contato",
+                "operationId": "aaeb8286b242c3ea0acf1e1cc43d5a48",
+                "parameters": [
+                    {
+                        "name": "contact",
+                        "in": "path",
+                        "description": "ID do contato",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Contato atualizado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/Contact"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Erro ao processar a requisição",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Erro ao atualizar contato"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Contatos"
+                ],
+                "summary": "Exclui um contato",
+                "operationId": "9a033d4e695e34378889a91f795dbcec",
+                "parameters": [
+                    {
+                        "name": "contact",
+                        "in": "path",
+                        "description": "ID do contato",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Contato excluído com sucesso"
+                    },
+                    "400": {
+                        "description": "Erro ao processar a requisição",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Erro ao excluir contato"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/people": {
+            "get": {
+                "tags": [
+                    "Pessoas"
+                ],
+                "summary": "Lista todas as pessoas com seus contatos",
+                "operationId": "e98ae4a18dc0a2ae0b94a6a59a39dc10",
+                "responses": {
+                    "200": {
+                        "description": "Lista de pessoas com contatos"
+                    },
+                    "400": {
+                        "description": "Erro ao processar a requisição",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Erro ao listar pessoas"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Pessoas"
+                ],
+                "summary": "Cria uma nova pessoa com contatos",
+                "operationId": "5bd780ad283a1d97e0792b21f49a7416",
                 "requestBody": {
                     "required": true,
                     "content": {
                         "application/json": {
                             "schema": {
-                                "$ref": "#/components/schemas/StoreUserRequest"
+                                "$ref": "#/components/schemas/StorePersonRequest"
                             }
                         }
                     }
                 },
                 "responses": {
                     "201": {
-                        "description": "Usuário registrado com sucesso"
+                        "description": "Pessoa criada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
                     },
                     "400": {
-                        "description": "Erro no registro"
+                        "description": "Erro ao processar a requisição",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Erro ao criar pessoa"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/people/{person}": {
+            "get": {
+                "tags": [
+                    "Pessoas"
+                ],
+                "summary": "Obtém detalhes de uma pessoa com contatos",
+                "operationId": "975f1a51a61f7bf1855c1bde5b92a4c1",
+                "parameters": [
+                    {
+                        "name": "person",
+                        "in": "path",
+                        "description": "ID da pessoa",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Detalhes da pessoa com contatos"
+                    },
+                    "400": {
+                        "description": "Erro ao processar a requisição"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Pessoas"
+                ],
+                "summary": "Atualiza uma pessoa e seus contatos",
+                "operationId": "41023ac18df385494b13a7044cff939f",
+                "parameters": [
+                    {
+                        "name": "person",
+                        "in": "path",
+                        "description": "ID da pessoa",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdatePersonRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Pessoa atualizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Erro ao processar a requisição",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Erro ao atualizar pessoa"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Pessoas"
+                ],
+                "summary": "Exclui uma pessoa e seus contatos",
+                "operationId": "e6075bf0464a4e1d0cb907e31e50954c",
+                "parameters": [
+                    {
+                        "name": "person",
+                        "in": "path",
+                        "description": "ID da pessoa",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Pessoa excluída com sucesso"
+                    },
+                    "400": {
+                        "description": "Erro ao processar a requisição",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Erro ao excluir pessoa"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -65,48 +500,111 @@
     },
     "components": {
         "schemas": {
-            "StoreUserRequest": {
+            "Contact": {
                 "required": [
-                    "name",
-                    "document",
-                    "email"
+                    "id",
+                    "type",
+                    "contact"
                 ],
                 "properties": {
-                    "name": {
-                        "type": "string",
-                        "example": "John Doe"
+                    "id": {
+                        "description": "ID do contato",
+                        "type": "integer"
                     },
-                    "document": {
-                        "type": "string",
-                        "example": "12345678901"
+                    "type": {
+                        "description": "Tipo de contato",
+                        "type": "string"
                     },
-                    "email": {
-                        "type": "string",
-                        "format": "email",
-                        "example": "johndoe@example.com"
+                    "contact": {
+                        "description": "Informação do contato",
+                        "type": "string"
                     }
                 },
                 "type": "object"
             },
-            "TransferRequest": {
+            "BracketRequest": {
                 "required": [
-                    "value",
-                    "payer",
-                    "payeer"
+                    "brackets"
                 ],
                 "properties": {
-                    "value": {
-                        "type": "number",
-                        "format": "float",
-                        "example": 100.5
+                    "brackets": {
+                        "description": "Sequence of brackets to be validated",
+                        "type": "string",
+                        "example": "(){}[]"
+                    }
+                },
+                "type": "object"
+            },
+            "StorePersonRequest": {
+                "required": [
+                    "name",
+                    "contacts"
+                ],
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "example": "Fulano de Tal"
                     },
-                    "payer": {
-                        "type": "integer",
-                        "example": 1
+                    "contacts": {
+                        "type": "array",
+                        "items": {
+                            "required": [
+                                "type",
+                                "contact"
+                            ],
+                            "properties": {
+                                "type": {
+                                    "type": "string",
+                                    "enum": [
+                                        "phone",
+                                        "email",
+                                        "whatsapp"
+                                    ]
+                                },
+                                "contact": {
+                                    "type": "string",
+                                    "example": "fulano@example.com"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "UpdatePersonRequest": {
+                "required": [
+                    "name",
+                    "contacts"
+                ],
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "example": "Fulano de Tal"
                     },
-                    "payeer": {
-                        "type": "integer",
-                        "example": 2
+                    "contacts": {
+                        "type": "array",
+                        "items": {
+                            "required": [
+                                "type",
+                                "contact"
+                            ],
+                            "properties": {
+                                "type": {
+                                    "type": "string",
+                                    "enum": [
+                                        "phone",
+                                        "email",
+                                        "whatsapp"
+                                    ]
+                                },
+                                "contact": {
+                                    "type": "string",
+                                    "example": "fulano@example.com"
+                                }
+                            },
+                            "type": "object"
+                        }
                     }
                 },
                 "type": "object"
@@ -115,8 +613,12 @@
     },
     "tags": [
         {
-            "name": "Transferências",
-            "description": "Endpoints relacionados a transferências"
+            "name": "Contatos",
+            "description": "Endpoints relacionados a contatos"
+        },
+        {
+            "name": "Pessoas",
+            "description": "Endpoints relacionados a pessoas"
         }
     ]
 }
