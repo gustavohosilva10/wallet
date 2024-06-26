@@ -33,7 +33,7 @@ Copie o arquivo de exemplo .env.example para .env e configure as variáveis de a
 A aplicação estará disponível em http://localhost:8080
 
 ## Documentação da API
-Para acessar a documentação da API, utilize o endpoint /api-docs após iniciar a aplicação. Por exemplo: http://localhost:8080/api-docs
+Para acessar a documentação da API, utilize o endpoint /api-docs após iniciar a aplicação. Por exemplo: http://localhost:8080/api/documentation
 
 ## Autores
 Gustavo henrique @gustavohosilva10
